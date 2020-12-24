@@ -19,9 +19,12 @@ class DontCrushDuckieTaskSolution(TaskSolution):
             obs, reward, done, info = env.step([1, 0])
             img = cv2.cvtColor(np.ascontiguousarray(obs), cv2.COLOR_BGR2RGB)
             
-            mask = cv2.inRange(img, np.array([180,180,0]), np.array([255,255,150]))
+            lower_color_bound = np.array([180,180,0])
+            upper_color_bound = np.array([255,255,150])
             
-            if (np.sum(mask) >= 0.1 * mask.shape[0] * mask.shape[1] * 255):
+            mask = cv2.inRange(img, lower_color_bound, upper_color_bound)
+            
+            if (np.sum(mask) >= 0.05 * mask.shape[0] * mask.shape[1] * 255):
                 obs, reward, done, info = env.step([0, 0])
                 condition = False
                 
